@@ -1,19 +1,23 @@
-// New Inventory Manager for Headphones using objects and functions
-
 let inventory = [
     {
         brand: "Focal",
         model: "Radiance",
+        dateAdded: "04/09/2024",
+        desire: "high",
         isOpenBack: false
     },
     {
         brand: "Meze",
         model: "109 Pro",
+        dateAdded: "05/05/2025",
+        desire: "high",
         isOpenBack: true
     },
     {
         brand: "Sennheiser",
         model: "HD600",
+        dateAdded: "12/20/2023",
+        desire: "low",
         isOpenBack: true
     }
 ];
@@ -31,7 +35,7 @@ function viewInventory() {
     } else {
         let itemsList = "<h2>Inventory Headphones:</h2><ol>";
         for (let i = 0; i < inventory.length; i++) {
-            itemsList += `<li>${inventory[i].brand} ${inventory[i].model} - Open-Back: ${inventory[i].isOpenBack ? "Yes" : "No"}</li>`;
+            itemsList += `<li>${inventory[i].brand} ${inventory[i].model} - Date Obtained: ${inventory[i].dateAdded} - Desire: ${inventory[i].desire} - Open-Back: ${inventory[i].isOpenBack ? "Yes" : "No"}</li>`;
         }
         itemsList += "</ol>";
         outputDiv.innerHTML = itemsList;
@@ -40,16 +44,33 @@ function viewInventory() {
 
 function addHeadphone() {
     let brand = prompt("Enter the brand of the new headphone:");
+    if (!brand) {
+        alert("You must enter a brand.");
+        return;
+    }
+
     let model = prompt("Enter the model of the new headphone:");
+    if (!model) {
+        alert("You must enter a model.");
+        return;
+    }
+
+    let desire = prompt("Enter your desire level for these headhpones (high, medium, low):")
+    if (!["high", "medium", "low"].includes(desire)) {
+        alert("Invalid priority. Please enter high, medium, or low.");
+        return;
+    }
+    
+    let dateAdded = prompt("Enter the date obtained \n(MM/DD/YYYY):")
+    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(dateAdded)) {
+        alert("Invalid date format. Please use MM/DD/YYYY.");
+        return;
+    }
+
     let isOpenBack = confirm("Is the headphone open-back? (OK for Yes, Cancel for No)");
 
-    if (brand && model) {
-        inventory.push({ brand, model, isOpenBack });
-        alert(`Added "${brand} ${model}" to inventory.`);
-        viewInventory();
-    } else {
-        alert("Invalid input. Headphone not added.");
-    }
+    inventory.push({brand, model, desire, dateAdded, isOpenBack});
+    alert(`Added "${brand}, ${model}" to your inventory.`)
 }
 
 function removeHeadphone() {
