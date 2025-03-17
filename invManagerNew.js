@@ -28,17 +28,29 @@ function displayMenu() {
     return prompt(`Inventory Manager\n1. View all headphones\n2. Add a new headphone\n3. Remove a headphone\n4. Exit\nChoose an option:`);
 }
 
-// Update the displayed list after adding a headphone
 function viewInventory() {
     if (inventory.length === 0) {
         outputDiv.innerHTML = "<h2>No headphones in inventory.</h2>";
     } else {
         let itemsList = "<h2>Inventory Headphones:</h2><ol>";
         for (let i = 0; i < inventory.length; i++) {
-            itemsList += `<li>${inventory[i].brand} ${inventory[i].model} - Date Obtained: ${inventory[i].dateAdded} - Desire: ${inventory[i].desire} - Open-Back: ${inventory[i].isOpenBack ? "Yes" : "No"}</li>`;
+            itemsList += `<li class="inventory-item">${inventory[i].brand} ${inventory[i].model} - Date Obtained: ${inventory[i].dateAdded} - Desire: ${inventory[i].desire} - Open-Back: ${inventory[i].isOpenBack ? "Yes" : "No"}</li>`;
         }
         itemsList += "</ol>";
         outputDiv.innerHTML = itemsList;
+
+        const inventoryItems = document.querySelectorAll('.inventory-item');
+        inventoryItems.forEach(item => {
+            item.addEventListener('mouseover', function() {
+                this.style.backgroundColor = '#725A7B';
+                this.style.color = '#F9F9F9'; 
+            });
+
+            item.addEventListener('mouseout', function() {
+                this.style.backgroundColor = '';
+                this.style.color = ''; 
+            });
+        });
     }
 }
 
@@ -55,7 +67,7 @@ function addHeadphone() {
         return;
     }
 
-    let desire = prompt("Enter your desire level for these headhpones (high, medium, low):")
+    let desire = prompt("Enter your desire level for these headphones (high, medium, low):")
     if (!["high", "medium", "low"].includes(desire)) {
         alert("Invalid priority. Please enter high, medium, or low.");
         return;
@@ -70,7 +82,8 @@ function addHeadphone() {
     let isOpenBack = confirm("Is the headphone open-back? (OK for Yes, Cancel for No)");
 
     inventory.push({brand, model, desire, dateAdded, isOpenBack});
-    alert(`Added "${brand}, ${model}" to your inventory.`)
+    alert(`Added "${brand}, ${model}" to your inventory.`);
+    viewInventory(); // Refresh the inventory display
 }
 
 function removeHeadphone() {
@@ -117,5 +130,14 @@ function main() {
 
 document.getElementById('openMenu').addEventListener('click', main);
 
-// Initial display of inventory
 viewInventory();
+
+document.getElementById('messageBtn').addEventListener('click', function() {
+    document.getElementById('message').innerHTML = "<a href='https://adobe.ly/3YMcVsL' target=_blank>Check out my photography!</a>";
+});
+
+document.getElementById('textInput').addEventListener('input', function() {
+    let words = this.value.split(' ');
+    let meowWords = words.map(word => word + " meow");
+    document.getElementById('textOutput').textContent = meowWords.join(' ');
+});
